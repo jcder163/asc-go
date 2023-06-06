@@ -21,7 +21,7 @@ type AppStoreVersionReleaseRequestResponse struct {
 	Links DocumentLinks                 `json:"lins"`
 }
 
-func (s *PublishingService) PublishingAppVersion(ctx context.Context, versionID string, state *PhasedReleaseState) (*AppStoreVersionReleaseRequestResponse, *Response, error) {
+func (s *PublishingService) PublishingAppVersion(ctx context.Context, versionID string) (*AppStoreVersionReleaseRequestResponse, *Response, error) {
 	req := appStoreVersionReleaseRequestCreateRequest{
 		Type:        "appStoreVersionReleaseRequests",
 		VersionID:   versionID,
