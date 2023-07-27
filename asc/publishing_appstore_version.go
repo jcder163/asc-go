@@ -5,9 +5,19 @@ import (
 )
 
 type appStoreVersionReleaseRequestCreateRequest struct {
-	Type        string `json:"data.type"`
-	VersionID   string `json:"data.relationships.appStoreVersion.data.id"`
-	VersionType string `json:"data.relationships.appStoreVersion.data.type"`
+	Type          string        `json:"type"`
+	RelationShips relationships `json:"relationships"`
+}
+
+type relationships struct {
+	Version appStoreVersion `json:"appStoreVersion"`
+}
+type appStoreVersion struct {
+	Data data `json:"data"`
+}
+type data struct {
+	VersionID   string `json:"id"`
+	VersionType string `json:"type"`
 }
 
 type AppStoreVersionReleaseRequest struct {
@@ -22,10 +32,20 @@ type AppStoreVersionReleaseRequestResponse struct {
 }
 
 func (s *PublishingService) PublishingAppVersion(ctx context.Context, versionID string) (*AppStoreVersionReleaseRequestResponse, *Response, error) {
-	req := appStoreVersionReleaseRequestCreateRequest{
-		Type:        "appStoreVersionReleaseRequests",
+	versiondata := data{
 		VersionID:   versionID,
 		VersionType: "appStoreVersions",
+	}
+	appStoreVersion := appStoreVersion{
+		Data: versiondata,
+	}
+
+	relationshipsData := relationships{
+		Version: appStoreVersion,
+	}
+	req := appStoreVersionReleaseRequestCreateRequest{
+		Type:          "appStoreVersionReleaseRequests",
+		RelationShips: relationshipsData,
 	}
 
 	res := new(AppStoreVersionReleaseRequestResponse)
